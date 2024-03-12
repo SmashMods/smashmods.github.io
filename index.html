@@ -78,11 +78,9 @@
                         <div class="card">
                             <img src="${mod.image}" class="card-img-top" alt="${mod.name}">
                             <div class="card-body">
-                                <h5 class="card-title">
-                                    ${mod.name}
-                                </h5>
+                                <h5 class="card-title">${mod.name}</h5>
                                 <p class="card-text">${mod.description}</p>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.title}', '${mod.author.image}', '${mod.downloadLink}', '${mod.author.support}', '${mod.gameBananaLink}')">View Details</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.link}', '${mod.gameBananaLink}')">View Details</button>
                             </div>
                         </div>
                     </div>
@@ -100,26 +98,16 @@
         }
 
         // Function to display mod details in the modal
-        function displayModDetails(name, description, image, downloadLink, authorTitle, authorImage, authorLink, authorSupport, gameBananaLink) {
+        function displayModDetails(name, description, image, downloadLink, authorLink, gameBananaLink) {
             const modalBody = document.querySelector('.modal-body');
             modalBody.innerHTML = `
                 <img src="${image}" class="img-fluid mb-3" alt="${name}">
                 <h5>${name}</h5>
                 <p>${description}</p>
                 <p><strong>Download Link:</strong> <a href="${downloadLink}" target="_blank">${downloadLink}</a></p>
-                <p><strong>Author:</strong> <a href="${authorLink}" target="_blank">${authorTitle}</a></p>
+                <p><strong>Author:</strong> <a href="${authorLink}" target="_blank">Visit author's page</a></p>
                 <p><strong>GameBanana Link:</strong> <a href="${gameBananaLink}" target="_blank">${gameBananaLink}</a></p>
             `;
-
-            // If author image is provided, display it
-            if (authorImage) {
-                modalBody.innerHTML += `<img src="${authorImage}" class="img-fluid mb-3" alt="${authorTitle}">`;
-            }
-
-            // If author support link is provided, display it
-            if (authorSupport) {
-                modalBody.innerHTML += `<p><strong>Support the Author:</strong> <a href="${authorSupport}" target="_blank">${authorSupport}</a></p>`;
-            }
         }
 
         // Display mods on page load
