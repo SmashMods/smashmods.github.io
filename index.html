@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smash Bros. Mods Showcase</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://i.imgur.com/wqG3h6Q.png">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Super Smash Bros. Mods Showcase</h1>
+
+        <!-- Featured Mods Section -->
+        <section id="featured-mods">
+            <h2 class="text-center mb-3">Featured Mods</h2>
+            <div class="row">
+                <!-- Featured mod cards will be dynamically generated here -->
+            </div>
+        </section>
+
+        <!-- All Mods Section -->
+        <section id="all-mods">
+            <h2 class="text-center mb-3">All Mods</h2>
+            <div class="row">
+                <!-- All mod cards will be dynamically generated here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal for displaying mod details -->
+    <div class="modal fade" id="modDetailsModal" tabindex="-1" aria-labelledby="modDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modDetailsModalLabel">Mod Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Mod details will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
