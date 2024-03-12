@@ -15,7 +15,7 @@
         <!-- Featured Mods Section -->
         <section id="featured-mods">
             <h2 class="text-center mb-3">Featured Mods</h2>
-            <div class="row">
+            <div class="row" id="featured-mods-container">
                 <!-- Featured mod cards will be dynamically generated here -->
             </div>
         </section>
@@ -23,7 +23,7 @@
         <!-- All Mods Section -->
         <section id="all-mods">
             <h2 class="text-center mb-3">All Mods</h2>
-            <div class="row">
+            <div class="row" id="all-mods-container">
                 <!-- All mod cards will be dynamically generated here -->
             </div>
         </section>
@@ -50,5 +50,78 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="scripts.js"></script>
+    <script>
+        // Fetch mod data from JSON file
+        fetch('https://raw.githubusercontent.com/SmashMods/smashmods.github.io/main/ssbumods.json')
+            .then(response => response.json())
+            .then(data => {
+                // Generate mod cards for featured mods
+                const featuredModsContainer = document.getElementById('featured-mods-container');
+                data.forEach(mod => {
+                    const modCard = createModCard(mod);
+                    featuredModsContainer.appendChild(modCard);
+                });
+
+                // Generate mod cards for all mods
+                const allModsContainer = document.getElementById('all-mods-container');
+                data.forEach(mod => {
+                    const modCard = createModCard(mod);
+                    allModsContainer.appendChild(modCard);
+                });
+            })
+            .catch(error => console.error('Error fetching JSON:', error));
+
+        // Function to create a mod card
+        function createModCard(mod) {
+            const modCard = document.createElement('div');
+            modCard.classList.add('col-md-4', 'mb-4');
+
+            const card = document.createElement('div');
+            card.classList.add('card', 'h-100', 'hover-shadow');
+
+            const img = document.createElement('img');
+            img.src = mod.image;
+            img.classList.add('card-img-top');
+            img.alt = mod.name;
+
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            const title = document.createElement('h5');
+            title.classList.add('card-title');
+            title.textContent = mod.name;
+
+            const description = document.createElement('p');
+            description.classList.add('card-text');
+            description.textContent = mod.description;
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = mod.downloadLink;
+            downloadLink.textContent = 'Download Mod';
+            downloadLink.classList.add('btn', 'btn-primary', 'mr-2');
+
+            const creator = document.createElement('span');
+            creator.textContent = 'Creator: ' + mod.creator;
+            creator.classList.add('mr-2');
+
+            const gameBananaLink = document.createElement('a');
+            gameBananaLink.href = mod.gameBananaLink;
+            gameBananaLink.textContent = 'GameBanana Page';
+            gameBananaLink.classList.add('btn', 'btn-secondary');
+
+            cardBody.appendChild(title);
+            cardBody.appendChild(description);
+            cardBody.appendChild(downloadLink);
+            cardBody.appendChild(creator);
+            cardBody.appendChild(gameBananaLink);
+
+            card.appendChild(img);
+            card.appendChild(cardBody);
+
+            modCard.appendChild(card);
+
+            return modCard;
+        }
+    </script>
 </body>
 </html>
