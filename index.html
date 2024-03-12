@@ -15,7 +15,7 @@
         <!-- Featured Mods Section -->
         <section id="featured-mods">
             <h2 class="text-center mb-3">Featured Mods</h2>
-            <div class="row">
+            <div class="row" id="featured-mods-container">
                 <!-- Featured mod cards will be dynamically generated here -->
             </div>
         </section>
@@ -23,7 +23,7 @@
         <!-- All Mods Section -->
         <section id="all-mods">
             <h2 class="text-center mb-3">All Mods</h2>
-            <div class="row">
+            <div class="row" id="all-mods-container">
                 <!-- All mod cards will be dynamically generated here -->
             </div>
         </section>
@@ -52,27 +52,23 @@
     <script src="scripts.js"></script>
 
     <script>
-        // JSON data
-        const mods = [
-            {
-                "name": "Infinite Mod",
-                "description": "Adds Infinite from Sonic Forces over Lucario.",
-                "image": "https://i.ibb.co/b6Z69NZ/646a9b2083b12.jpg",
-                "downloadLink": "https://example.com/infinite_mod.zip",
-                "author": {
-                    "title": "MonadoJo",
-                    "titleimage": "https://images.gamebanana.com/img/upic/65747d41d9cad.png",
-                    "image": "https://images.gamebanana.com/img/av/64cc2d58c1df1.png",
-                    "link": "https://example.com/author_profile",
-                    "support": "",
-                },
-                "gameBananaLink": "https://gamebanana.com/mods/445070"
+        // Function to fetch mods
+        async function fetchMods() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/SmashMods/smashmods.github.io/main/ssbumods.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const modsData = await response.json();
+                displayMods(modsData, 'featured-mods-container', true);
+                displayMods(modsData, 'all-mods-container', false);
+            } catch (error) {
+                console.error('Could not load mods:', error);
             }
-            // Add more mod objects here if needed
-        ];
+        }
 
         // Function to display mods
-        function displayMods(modsData, containerId) {
+        function displayMods(modsData, containerId, isFeatured) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
 
@@ -83,16 +79,24 @@
                             <img src="${mod.image}" class="card-img-top" alt="${mod.name}">
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <img src="${mod.author.titleimage}" alt="${mod.author.title}" style="max-height: 20px;"> ${mod.author.title}
+                                    ${mod.name}
                                 </h5>
                                 <p class="card-text">${mod.description}</p>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.title}', '${mod.author.image}', '${mod.author.link}', '${mod.author.support}', '${mod.gameBananaLink}')">View Details</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.title}', '${mod.author.image}', '${mod.downloadLink}', '${mod.author.support}', '${mod.gameBananaLink}')">View Details</button>
                             </div>
                         </div>
                     </div>
                 `;
                 container.innerHTML += modCard;
             });
+
+            if (isFeatured) {
+                const featuredModsTitle = document.querySelector('#featured-mods h2');
+                featuredModsTitle.textContent = 'Featured Mods';
+            } else {
+                const allModsTitle = document.querySelector('#all-mods h2');
+                allModsTitle.textContent = 'All Mods';
+            }
         }
 
         // Function to display mod details in the modal
@@ -119,10 +123,7 @@
         }
 
         // Display mods on page load
-        window.onload = function() {
-            displayMods(mods, 'featured-mods');
-            displayMods(mods, 'all-mods');
-        };
+        window.onload = fetchMods;
     </script>
 </body>
 </html>
