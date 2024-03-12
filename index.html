@@ -15,7 +15,7 @@
         <!-- Featured Mods Section -->
         <section id="featured-mods">
             <h2 class="text-center mb-3">Featured Mods</h2>
-            <div class="row" id="featured-mods-container">
+            <div class="row">
                 <!-- Featured mod cards will be dynamically generated here -->
             </div>
         </section>
@@ -23,7 +23,7 @@
         <!-- All Mods Section -->
         <section id="all-mods">
             <h2 class="text-center mb-3">All Mods</h2>
-            <div class="row" id="all-mods-container">
+            <div class="row">
                 <!-- All mod cards will be dynamically generated here -->
             </div>
         </section>
@@ -50,78 +50,79 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="scripts.js"></script>
+
     <script>
-        // Fetch mod data from JSON file
-        fetch('https://raw.githubusercontent.com/SmashMods/smashmods.github.io/main/ssbumods.json')
-            .then(response => response.json())
-            .then(data => {
-                // Generate mod cards for featured mods
-                const featuredModsContainer = document.getElementById('featured-mods-container');
-                data.forEach(mod => {
-                    const modCard = createModCard(mod);
-                    featuredModsContainer.appendChild(modCard);
-                });
+        // JSON data
+        const mods = [
+            {
+                "name": "Infinite Mod",
+                "description": "Adds Infinite from Sonic Forces over Lucario.",
+                "image": "https://i.ibb.co/b6Z69NZ/646a9b2083b12.jpg",
+                "downloadLink": "https://example.com/infinite_mod.zip",
+                "author": {
+                    "title": "MonadoJo",
+                    "titleimage": "https://images.gamebanana.com/img/upic/65747d41d9cad.png",
+                    "image": "https://images.gamebanana.com/img/av/64cc2d58c1df1.png",
+                    "link": "https://example.com/author_profile",
+                    "support": "",
+                },
+                "gameBananaLink": "https://gamebanana.com/mods/445070"
+            }
+            // Add more mod objects here if needed
+        ];
 
-                // Generate mod cards for all mods
-                const allModsContainer = document.getElementById('all-mods-container');
-                data.forEach(mod => {
-                    const modCard = createModCard(mod);
-                    allModsContainer.appendChild(modCard);
-                });
-            })
-            .catch(error => console.error('Error fetching JSON:', error));
+        // Function to display mods
+        function displayMods(modsData, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
 
-        // Function to create a mod card
-        function createModCard(mod) {
-            const modCard = document.createElement('div');
-            modCard.classList.add('col-md-4', 'mb-4');
-
-            const card = document.createElement('div');
-            card.classList.add('card', 'h-100', 'hover-shadow');
-
-            const img = document.createElement('img');
-            img.src = mod.image;
-            img.classList.add('card-img-top');
-            img.alt = mod.name;
-
-            const cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
-
-            const title = document.createElement('h5');
-            title.classList.add('card-title');
-            title.textContent = mod.name;
-
-            const description = document.createElement('p');
-            description.classList.add('card-text');
-            description.textContent = mod.description;
-
-            const downloadLink = document.createElement('a');
-            downloadLink.href = mod.downloadLink;
-            downloadLink.textContent = 'Download Mod';
-            downloadLink.classList.add('btn', 'btn-primary', 'mr-2');
-
-            const creator = document.createElement('span');
-            creator.textContent = 'Creator: ' + mod.creator;
-            creator.classList.add('mr-2');
-
-            const gameBananaLink = document.createElement('a');
-            gameBananaLink.href = mod.gameBananaLink;
-            gameBananaLink.textContent = 'GameBanana Page';
-            gameBananaLink.classList.add('btn', 'btn-secondary');
-
-            cardBody.appendChild(title);
-            cardBody.appendChild(description);
-            cardBody.appendChild(downloadLink);
-            cardBody.appendChild(creator);
-            cardBody.appendChild(gameBananaLink);
-
-            card.appendChild(img);
-            card.appendChild(cardBody);
-
-            modCard.appendChild(card);
-
-            return modCard;
+            modsData.forEach(mod => {
+                const modCard = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="${mod.image}" class="card-img-top" alt="${mod.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <img src="${mod.author.titleimage}" alt="${mod.author.title}" style="max-height: 20px;"> ${mod.author.title}
+                                </h5>
+                                <p class="card-text">${mod.description}</p>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.title}', '${mod.author.image}', '${mod.author.link}', '${mod.author.support}', '${mod.gameBananaLink}')">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += modCard;
+            });
         }
+
+        // Function to display mod details in the modal
+        function displayModDetails(name, description, image, downloadLink, authorTitle, authorImage, authorLink, authorSupport, gameBananaLink) {
+            const modalBody = document.querySelector('.modal-body');
+            modalBody.innerHTML = `
+                <img src="${image}" class="img-fluid mb-3" alt="${name}">
+                <h5>${name}</h5>
+                <p>${description}</p>
+                <p><strong>Download Link:</strong> <a href="${downloadLink}" target="_blank">${downloadLink}</a></p>
+                <p><strong>Author:</strong> <a href="${authorLink}" target="_blank">${authorTitle}</a></p>
+                <p><strong>GameBanana Link:</strong> <a href="${gameBananaLink}" target="_blank">${gameBananaLink}</a></p>
+            `;
+
+            // If author image is provided, display it
+            if (authorImage) {
+                modalBody.innerHTML += `<img src="${authorImage}" class="img-fluid mb-3" alt="${authorTitle}">`;
+            }
+
+            // If author support link is provided, display it
+            if (authorSupport) {
+                modalBody.innerHTML += `<p><strong>Support the Author:</strong> <a href="${authorSupport}" target="_blank">${authorSupport}</a></p>`;
+            }
+        }
+
+        // Display mods on page load
+        window.onload = function() {
+            displayMods(mods, 'featured-mods');
+            displayMods(mods, 'all-mods');
+        };
     </script>
 </body>
 </html>
