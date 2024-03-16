@@ -7,6 +7,22 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="https://i.imgur.com/wqG3h6Q.png">
+    <style>
+        .card {
+            height: 100%;
+        }
+        .card-title {
+            font-size: 1rem; /* Initial font size */
+            overflow: hidden; /* Hide overflow */
+            white-space: nowrap; /* Prevent text wrapping */
+            text-overflow: ellipsis; /* Display ellipsis for overflow text */
+            opacity: 0; /* Initially hide the mod names */
+            transition: opacity 0.3s ease; /* Add transition for smoothness */
+        }
+        .card:hover .card-title {
+            opacity: 1; /* Display mod names on hover */
+        }
+    </style>
 </head>
 <body style="background-color: #F9F8F9;">
     <div class="container mt-5">
@@ -81,14 +97,10 @@
 
             modsData.forEach(mod => {
                 const modCard = `
-                    <div class="col-md-4 mb-4">
+                    <div class="col-3 mb-4">
                         <div class="card">
-                            <img src="${isPortraitView ? mod.imagevertical : mod.image}" class="card-img-top ${isPortraitView ? 'portrait' : 'landscape'}" alt="${mod.name}">
-                            <div class="card-body">
-                                <h5 class="card-title">${mod.name}</h5>
-                                <p class="card-text">${mod.description}</p>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.link}', '${mod.gameBananaLink}')">View Details</button>
-                            </div>
+                            <img src="${isPortraitView ? mod.imagevertical : mod.image}" class="card-img-top ${isPortraitView ? 'portrait' : 'landscape'}" alt="${mod.name}" data-toggle="modal" data-target="#modDetailsModal" onclick="displayModDetails('${mod.name}', '${mod.description}', '${mod.image}', '${mod.downloadLink}', '${mod.author.link}', '${mod.gameBananaLink}')">
+                            <h5 class="card-title">${mod.name}</h5>
                         </div>
                     </div>
                 `;
@@ -102,6 +114,21 @@
                 const allModsTitle = document.querySelector('#all-mods h2');
                 allModsTitle.textContent = 'All Mods';
             }
+
+            // Auto-resize font size of mod names
+            autoResizeFont('.card-title');
+        }
+
+        // Function to auto-resize font size
+        function autoResizeFont(selector) {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(element => {
+                let fontSize = 1; // Starting font size
+                while (element.scrollWidth > element.offsetWidth) {
+                    fontSize -= 0.1; // Decrease font size
+                    element.style.fontSize = `${fontSize}rem`;
+                }
+            });
         }
 
         // Function to display mod details in the modal
