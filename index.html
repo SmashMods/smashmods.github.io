@@ -8,9 +8,14 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="https://i.imgur.com/wqG3h6Q.png">
 </head>
-<body>
+<body style="background-color: #F9F8F9;">
     <div class="container mt-5">
         <h1 class="text-center mb-4">Super Smash Bros. Mods Showcase</h1>
+
+        <!-- Button to toggle view -->
+        <div class="text-center mb-3">
+            <button type="button" class="btn btn-primary" id="toggleViewButton" onclick="toggleView()">Toggle View</button>
+        </div>
 
         <!-- Featured Mods Section -->
         <section id="featured-mods">
@@ -52,6 +57,8 @@
     <script src="scripts.js"></script>
 
     <script>
+        let isPortraitView = false; // Initially set to false for landscape view
+
         // Function to fetch mods
         async function fetchMods() {
             try {
@@ -76,7 +83,7 @@
                 const modCard = `
                     <div class="col-md-4 mb-4">
                         <div class="card">
-                            <img src="${mod.image}" class="card-img-top" alt="${mod.name}">
+                            <img src="${isPortraitView ? mod.imagevertical : mod.image}" class="card-img-top ${isPortraitView ? 'portrait' : 'landscape'}" alt="${mod.name}">
                             <div class="card-body">
                                 <h5 class="card-title">${mod.name}</h5>
                                 <p class="card-text">${mod.description}</p>
@@ -108,6 +115,12 @@
                 <p><strong>Author:</strong> <a href="${authorLink}" target="_blank">Visit author's page</a></p>
                 <p><strong>GameBanana Link:</strong> <a href="${gameBananaLink}" target="_blank">${gameBananaLink}</a></p>
             `;
+        }
+
+        // Function to toggle view between portrait and landscape
+        function toggleView() {
+            isPortraitView = !isPortraitView;
+            fetchMods(); // Re-fetch and re-display mods to apply the new view
         }
 
         // Display mods on page load
